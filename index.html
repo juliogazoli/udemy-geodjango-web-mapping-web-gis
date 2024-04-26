@@ -17,6 +17,8 @@
 
 <body>
     <div id="map"></div>
+    <button onclick=fullScreenView()>View in full screen</button>
+    <div class="coordinate"></div>
 </body>
 
 </html>
@@ -24,14 +26,36 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-<script>
-    var map = L.map('map').setView([-14.869493988073582, -48.116555117718384], 13);
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
+<script>
+    // map class initialize
+    var map = L.map('map').setView([-14.869493988073582, -48.116555117718384], 13);
+    map.zoomControl.setPosition('topright')
+
+    // adding osm tilelayer
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
+    // adding marker in the center of map
     L.marker([-14.869493988073582, -48.116555117718384]).addTo(map)
         .bindPopup('A pretty CSS popup.<br> Easily customizable.')
         .openPopup();
+
+    // add map scale
+    L.control.scale().addTo(map)
+
+    // full screen map view
+    var mapId = document.getElementById('map')
+    function fullScreenView() {
+        mapId.requestFullscreen()
+    }
+
+    // map coordinate display
+    map.on('mousemove', function(e) {
+        console.log(e)
+        $('.coordinate').html(`Lat: ${e.latlng.lat} Lng: ${e.latlng.lng}`)
+    })
+
 </script>
